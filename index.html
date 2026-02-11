@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Dispatch Chantier</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #ffffff;
+      margin: 0;
+      padding: 20px;
+    }
+    h1, h2 { margin-top: 0; }
+    .hidden { display: none; }
+    .card {
+      background: #1e293b;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 10px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .primary { background: #22c55e; color: #000; }
+    .neutral { background: #334155; color: #fff; }
+    .danger { background: #ef4444; color: #fff; }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+    }
+    .small { font-size: 14px; opacity: 0.8; }
+  </style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <h1>Dispatch Chantier</h1>
+  <p class="small">Connexion</p>
+
+  <div class="card">
+    <input id="loginPhone" placeholder="Téléphone">
+    <button class="primary" onclick="login()">Se connecter</button>
+  </div>
+
+  <button class="neutral" onclick="show('home')">Créer un compte</button>
+</div>
+
+<!-- ACCUEIL -->
+<div id="home" class="hidden">
+  <h1>Créer un compte</h1>
+
+  <button class="primary" onclick="show('admin')">Admin</button>
+  <button class="neutral" onclick="show('employe')">Employé</button>
+</div>
+
+<!-- ADMIN REGISTER -->
+<div id="admin" class="hidden">
+  <h2>Inscription Admin</h2>
+  <div class="card">
+    <input id="adminName" placeholder="Nom complet">
+    <input id="adminPhone" placeholder="Téléphone">
+    <button class="primary" onclick="register('admin')">Créer</button>
+  </div>
+  <button class="neutral" onclick="back()">Retour</button>
+</div>
+
+<!-- EMPLOYE REGISTER -->
+<div id="employe" class="hidden">
+  <h2>Inscription Employé</h2>
+  <div class="card">
+    <input id="empName" placeholder="Nom complet">
+    <input id="empPhone" placeholder="Téléphone">
+    <button class="primary" onclick="register('employe')">Créer</button>
+  </div>
+  <button class="neutral" onclick="back()">Retour</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="hidden">
+  <h2 id="welcome"></h2>
+  <p id="role"></p>
+
+  <button class="neutral" onclick="logout()">Déconnexion</button>
+</div>
+
+<script>
+  const usersKey = 'dispatch_users';
+  const sessionKey = 'dispatch_session';
+
+  function show(id) {
+    ['login','home','admin','employe','dashboard'].forEach(e =>
+      document.getElementById(e).classList.add('hidden')
+    );
+    document.getElementById(id).classList.remove('hidden');
+  }
+
+  function back() {
+    show('home');
+  }
+
+  function register(role) {
+    const name = role === 'admin' ? adminName.value : empName.value;
+    const phone = role === 'admin' ? adminPhone.value : empPhone.value;
+
+    if (!name || !phone) {
+      alert('Champs manquants');
+      return;
+    }
+
+    const users = JSON.parse(localStorage.getItem(usersKey)) || [];
+
+    if (users.find(u => u.phone === phone)) {
+      alert('Téléphone déjà utilisé');
+      return;
+    }
+
+    users.push({ id: Date.now(), name, phone, role });
+    localStorage.setItem(usersKey, JSON.stringify(users));
+
+    alert('Compte créé');
+    show('login');
+  }
+
+  function login() {
+    const phone = loginPhone.value;
+    const users = JSON.parse(localStorage.getItem(usersKey)) || [];
+    const user = users.find(u => u.phone === phone);
+
+    if (!user) {
+      alert('Utilisateur introuvable');
+      return;
+    }
+
+    localStorage.setItem(sessionKey, JSON.stringify(user));
+    loadDashboard();
+  }
+
+  function loadDashboard() {
+    const user = JSON.parse(localStorage.getItem(sessionKey));
+    if (!user) {
+      show('login');
+      return;
+    }
+
+    welcome.innerText = `Bienvenue ${user.name}`;
+    role.innerText = `Rôle : ${user.role.toUpperCase()}`;
+
+    show('dashboard');
+  }
+
+  function logout() {
+    localStorage.removeItem(sessionKey);
+    show('login');
+  }
+
+  // AUTO LOGIN
+  loadDashboard();
+</script>
+
+</body>
+</html>
