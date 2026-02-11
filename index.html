@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Dispatch Chantier</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #ffffff;
+      margin: 0;
+      padding: 20px;
+    }
+    h1, h2 { margin-top: 0; }
+    .hidden { display: none; }
+    .card {
+      background: #1e293b;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 10px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .primary { background: #22c55e; color: #000; }
+    .neutral { background: #334155; color: #fff; }
+    .danger { background: #ef4444; color: #fff; }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+    }
+    .small { font-size: 14px; opacity: 0.8; }
+  </style>
+</head>
+
+<body>
+
+<div id="home">
+  <h1>Dispatch Chantier</h1>
+  <p class="small">Gestion équipes construction</p>
+
+  <button class="primary" onclick="show('admin')">Créer un compte ADMIN</button>
+  <button class="neutral" onclick="show('employe')">Créer un compte EMPLOYÉ</button>
+  <button class="danger" onclick="showUsers()">Voir la base de données</button>
+</div>
+
+<div id="admin" class="hidden">
+  <h2>Inscription – Admin</h2>
+  <div class="card">
+    <input id="adminName" placeholder="Nom complet">
+    <input id="adminPhone" placeholder="Téléphone">
+    <button class="primary" onclick="register('admin')">Créer le compte</button>
+  </div>
+  <button class="neutral" onclick="back()">Retour</button>
+</div>
+
+<div id="employe" class="hidden">
+  <h2>Inscription – Employé</h2>
+  <div class="card">
+    <input id="empName" placeholder="Nom complet">
+    <input id="empPhone" placeholder="Téléphone">
+    <button class="primary" onclick="register('employe')">Créer le compte</button>
+  </div>
+  <button class="neutral" onclick="back()">Retour</button>
+</div>
+
+<div id="database" class="hidden">
+  <h2>Utilisateurs enregistrés</h2>
+  <div id="list"></div>
+  <button class="neutral" onclick="back()">Retour</button>
+</div>
+
+<script>
+  function show(id) {
+    ['home','admin','employe','database'].forEach(e =>
+      document.getElementById(e).classList.add('hidden')
+    );
+    document.getElementById(id).classList.remove('hidden');
+  }
+
+  function back() { show('home'); }
+
+  function register(role) {
+    let name = role === 'admin'
+      ? adminName.value
+      : empName.value;
+
+    let phone = role === 'admin'
+      ? adminPhone.value
+      : empPhone.value;
+
+    if (!name || !phone) {
+      alert('Remplis tous les champs');
+      return;
+    }
+
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    users.push({ id: Date.now(), name, phone, role });
+    localStorage.setItem('users', JSON.stringify(users));
+
+    alert('Compte créé');
+    back();
+  }
+
+  function showUsers() {
+    show('database');
+    const list = document.getElementById('list');
+    list.innerHTML = '';
+
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    if (users.length === 0) {
+      list.innerHTML = '<p>Aucun utilisateur</p>';
+      return;
+    }
+
+    users.forEach(u => {
+      const d = document.createElement('div');
+      d.className = 'card';
+      d.innerHTML = `<strong>${u.name}</strong><br>${u.phone}<br>${u.role}`;
+      list.appendChild(d);
+    });
+  }
+</script>
+
+</body>
+</html>
