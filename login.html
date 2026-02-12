@@ -1,44 +1,46 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Connexion | B22</title>
 
-  <!-- ✅ CSS PREMIUM (BON CHEMIN) -->
+  <!-- CSS principal -->
   <link rel="stylesheet" href="css/style.css">
+
+  <!-- Sécurité lisibilité minimale au cas où -->
+  <style>
+    body {
+      background: #0b0f14;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+  </style>
 </head>
 
 <body>
 
-  <div class="login-page">
-    <div class="login-card">
+  <div class="login-container">
+    <div class="login-box">
 
       <h1>B22</h1>
-      <p>Accès sécurisé à la plateforme</p>
+      <h2>Connexion</h2>
 
       <form>
-        <input 
-          type="email" 
-          placeholder="Adresse courriel"
-          required
-        />
+        <label>Courriel</label>
+        <input type="email" placeholder="ex: nom@compagnie.com" required>
 
-        <input 
-          type="password" 
-          placeholder="Mot de passe"
-          required
-        />
+        <label>Mot de passe</label>
+        <input type="password" placeholder="••••••••" required>
 
         <button type="submit">
           Se connecter
         </button>
       </form>
 
-      <a href="index.html">
-        ← Retour à l’accueil
-      </a>
+      <div class="login-footer">
+        <a href="index.html">Retour à l’accueil</a>
+      </div>
 
     </div>
   </div>
