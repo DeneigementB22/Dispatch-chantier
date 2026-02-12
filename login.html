@@ -2,31 +2,37 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Connexion - Dispatch Chantier</title>
+<title>Connexion | Dispatch Chantier</title>
 <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
 
-<div class="login-wrapper">
-  <div class="login-box">
-    <div class="logo">
-      <h1>Dispatch Chantier</h1>
-      <p class="subtitle">Accédez à votre compte</p>
-    </div>
+<div class="page">
 
-    <div class="login-form">
-      <input id="loginEmail" type="email" placeholder="Courriel">
-      <input id="loginPassword" type="password" placeholder="Mot de passe">
+  <div class="card">
+    <div class="brand">Dispatch Chantier</div>
+    <div class="subtitle">Plateforme de coordination</div>
 
-      <button onclick="handleLogin()">Se connecter</button>
+    <div class="form">
 
-      <p id="loginMsg" class="msg"></p>
+      <label>Courriel</label>
+      <input type="email" id="loginEmail" placeholder="nom@entreprise.com">
 
-      <p class="small-text">
-        Pas encore de compte ? <a href="index.html">Créer un compte</a>
-      </p>
+      <label>Mot de passe</label>
+      <input type="password" id="loginPassword" placeholder="••••••••">
+
+      <button onclick="handleLogin()">Connexion</button>
+
+      <p id="loginMsg" class="error"></p>
+
+      <div class="footer">
+        <span>Pas encore de compte ?</span>
+        <a href="index.html">Créer un accès</a>
+      </div>
+
     </div>
   </div>
+
 </div>
 
 <script src="js/data.js"></script>
