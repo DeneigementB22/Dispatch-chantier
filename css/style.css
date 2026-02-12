@@ -1,97 +1,101 @@
-/* BASE */
+/* BODY */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #e0f7fa, #ffffff);
   margin: 0;
   padding: 0;
-  background-color: #f5f7fa;
   color: #333;
 }
 
-h2, h3 {
+/* LOGIN CONTAINER */
+.login-container {
+  max-width: 400px;
+  margin: 80px auto;
+  padding: 40px 30px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
   text-align: center;
-  margin-top: 20px;
+  border-top: 5px solid #007bff; /* bandeau bleu */
 }
 
-.container {
-  max-width: 900px;
-  margin: 20px auto;
-  background: #fff;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+.login-container .logo h1 {
+  margin-bottom: 15px;
+  font-size: 28px;
+  color: #007bff;
 }
 
-/* INPUTS */
-input, select {
-  width: calc(100% - 20px);
+/* TITRE & SOUS-TITRE */
+.login-container h2 {
+  margin-bottom: 5px;
+  color: #007bff;
+}
+
+.login-container .subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* INPUT */
+.login-container input {
+  width: 100%;
+  padding: 12px 15px;
   margin: 10px 0;
-  padding: 12px;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 16px;
+  transition: 0.3s;
+}
+
+.login-container input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px #007bff33;
 }
 
 /* BOUTONS */
-button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 12px 20px;
-  margin: 10px 0;
-  border-radius: 6px;
-  cursor: pointer;
+.login-container button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
   font-size: 16px;
-  transition: background 0.3s;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #007bff, #00bfff);
+  color: #fff;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-button:hover {
-  background-color: #0056b3;
+.login-container button:hover {
+  background: linear-gradient(90deg, #0056b3, #009acd);
 }
 
-/* LISTES ET LOGS */
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  padding: 8px;
-  margin: 6px 0;
-  background: #e9ecef;
-  border-radius: 6px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* SMS LOG */
-#smsLog p {
-  background: #d1e7dd;
-  padding: 6px;
-  border-radius: 6px;
-  margin: 4px 0;
+/* MESSAGES */
+.login-container .msg {
+  margin-top: 10px;
+  font-weight: bold;
+  color: red; /* erreur en rouge */
 }
 
 /* LINKS */
-a {
+.login-container .small-text {
+  margin-top: 15px;
+  font-size: 13px;
+  color: #555;
+}
+.login-container .small-text a {
   color: #007bff;
   text-decoration: none;
-  display: block;
-  text-align: center;
-  margin-top: 15px;
 }
-
-a:hover {
+.login-container .small-text a:hover {
   text-decoration: underline;
 }
 
 /* RESPONSIVE */
-@media screen and (max-width: 600px) {
-  .container {
-    margin: 10px;
-    padding: 15px;
-  }
-  button, input, select {
-    width: 100%;
+@media screen and (max-width: 480px) {
+  .login-container {
+    margin: 50px 15px;
+    padding: 30px 20px;
   }
 }
