@@ -1,42 +1,47 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>Connexion | Dispatch Chantier</title>
-<link rel="stylesheet" href="./css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Connexion | B22</title>
+
+  <!-- ✅ CSS PREMIUM (BON CHEMIN) -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-<div class="page">
+  <div class="login-page">
+    <div class="login-card">
 
-  <div class="card">
-    <div class="brand">Dispatch Chantier</div>
-    <div class="subtitle">Plateforme de coordination</div>
+      <h1>B22</h1>
+      <p>Accès sécurisé à la plateforme</p>
 
-    <div class="form">
+      <form>
+        <input 
+          type="email" 
+          placeholder="Adresse courriel"
+          required
+        />
 
-      <label>Courriel</label>
-      <input type="email" id="loginEmail" placeholder="nom@entreprise.com">
+        <input 
+          type="password" 
+          placeholder="Mot de passe"
+          required
+        />
 
-      <label>Mot de passe</label>
-      <input type="password" id="loginPassword" placeholder="••••••••">
+        <button type="submit">
+          Se connecter
+        </button>
+      </form>
 
-      <button onclick="handleLogin()">Connexion</button>
-
-      <p id="loginMsg" class="error"></p>
-
-      <div class="footer">
-        <span>Pas encore de compte ?</span>
-        <a href="index.html">Créer un accès</a>
-      </div>
+      <a href="index.html">
+        ← Retour à l’accueil
+      </a>
 
     </div>
   </div>
 
-</div>
-
-<script src="js/data.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/main.js"></script>
 </body>
 </html>
