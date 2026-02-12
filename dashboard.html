@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h2 id="welcome"></h2>
+
+<div id="adminView">
+  <h3>Créer équipe</h3>
+  <input id="teamName" placeholder="Nom équipe">
+  <div id="teamMembers"></div>
+  <button onclick="createTeam()">Créer équipe</button>
+
+  <h3>Créer chantier</h3>
+  <input id="siteName" placeholder="Nom chantier">
+  <input id="siteAddress" placeholder="Adresse chantier">
+  <select id="siteTeam"></select>
+  <button onclick="createSite()">Assigner chantier</button>
+
+  <h3>Envoyer SMS (simulé)</h3>
+  <button onclick="sendSMS('Tous')">SMS à tous</button>
+  <div id="smsLog"></div>
+</div>
+
+<div id="employeeView">
+  <h3>Mon chantier du jour</h3>
+  <p id="mySite">Aucun</p>
+
+  <h3>Présence</h3>
+  <button onclick="setPresence(true)">PRÉSENT</button>
+  <button onclick="setPresence(false)">ABSENT</button>
+</div>
+
+<button onclick="logout()">Déconnexion</button>
+
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
