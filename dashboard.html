@@ -1,48 +1,38 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>Dashboard</title>
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | B22</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-<div class="container">
-  <h2 id="welcome"></h2>
+<div class="login-container">
+  <div class="login-box">
 
-  <div id="adminView">
-    <h3>Créer une équipe</h3>
-    <input id="teamName" placeholder="Nom équipe">
-    <div id="teamMembers">
-      <!-- Checkbox pour membres -->
-    </div>
-    <button onclick="createTeam()">Créer équipe</button>
+    <h1>B22</h1>
+    <h2>Dashboard</h2>
 
-    <h3>Créer un chantier</h3>
-    <input id="siteName" placeholder="Nom chantier">
-    <input id="siteAddress" placeholder="Adresse chantier">
-    <select id="siteTeam"></select>
-    <button onclick="createSite()">Assigner chantier</button>
+    <p style="text-align:center; margin-bottom:25px;">
+      Bienvenue dans votre espace de gestion.
+    </p>
 
-    <h3>Envoyer SMS (simulé)</h3>
-    <button onclick="sendSMS('Tous')">SMS à tous</button>
-    <div id="smsLog"></div>
+    <button onclick="location.href='admin.html'">
+      Administration
+    </button>
+
+    <button onclick="location.href='index.html'" style="margin-top:12px;">
+      Accueil
+    </button>
+
+    <button onclick="location.href='login.html'" style="margin-top:12px; background:#374151;">
+      Déconnexion
+    </button>
+
   </div>
-
-  <div id="employeeView">
-    <h3>Mon chantier du jour</h3>
-    <p id="mySite">Aucun</p>
-
-    <h3>Présence</h3>
-    <button onclick="setPresence(true)">PRÉSENT</button>
-    <button onclick="setPresence(false)">ABSENT</button>
-  </div>
-
-  <button onclick="logout()">Déconnexion</button>
 </div>
 
-<script src="js/data.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/dashboard.js"></script>
 </body>
 </html>
