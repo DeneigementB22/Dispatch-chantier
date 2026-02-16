@@ -1,20 +1,39 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>Admin</title>
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | B22</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-<h2>Panneau Admin</h2>
+<div class="login-container">
+  <div class="login-box">
 
-<ul id="userList"></ul>
+    <h1>B22</h1>
+    <h2>Administration</h2>
 
-<button onclick="logout()">Déconnexion</button>
+    <p style="text-align:center; margin-bottom:25px;">
+      Gestion des employés et des accès.
+    </p>
 
-<script src="js/data.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/admin.js"></script>
+    <button>
+      Ajouter un employé
+    </button>
+
+    <button style="margin-top:12px;">
+      Supprimer un employé
+    </button>
+
+    <button onclick="location.href='dashboard.html'" 
+            style="margin-top:20px; background:#374151;">
+      Retour Dashboard
+    </button>
+
+  </div>
+</div>
+
 </body>
 </html>
