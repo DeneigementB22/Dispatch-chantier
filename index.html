@@ -2,30 +2,118 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Inscription</title>
-<link rel="stylesheet" href="css/style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Créer un compte | B22</title>
+
+<style>
+body{
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg,#0f172a,#1e293b);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.box{
+    background:#111827;
+    padding:35px;
+    width:100%;
+    max-width:420px;
+    border-radius:14px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.5);
+}
+
+h1{
+    text-align:center;
+    color:#22c55e;
+    margin-bottom:5px;
+}
+
+h2{
+    text-align:center;
+    color:#e5e7eb;
+    margin-bottom:25px;
+    font-weight:normal;
+}
+
+label{
+    color:#cbd5e1;
+    font-size:14px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-top:6px;
+    margin-bottom:18px;
+    border:none;
+    border-radius:8px;
+    background:#1f2937;
+    color:white;
+    font-size:15px;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    background:#22c55e;
+    border:none;
+    border-radius:8px;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.footer-link{
+    text-align:center;
+    margin-top:20px;
+}
+
+.footer-link a{
+    color:#22c55e;
+    text-decoration:none;
+}
+</style>
 </head>
+
 <body>
 
+<div class="box">
+
+<h1>B22</h1>
 <h2>Créer un compte</h2>
 
-<input id="email" placeholder="Courriel">
-<input id="password" type="password" placeholder="Mot de passe">
+<form id="registerForm">
 
-<select id="role">
-  <option value="employe">Employé</option>
-  <option value="chef">Chef d’équipe</option>
-  <option value="admin">Admin</option>
-</select>
+<label>Nom complet</label>
+<input type="text" required>
 
-<button onclick="handleRegister()">Créer le compte</button>
+<label>Courriel</label>
+<input type="email" required>
 
-<p id="msg"></p>
+<label>Mot de passe</label>
+<input type="password" required>
 
-<a href="login.html">Déjà un compte? Se connecter</a>
+<button type="submit">Créer le compte</button>
 
-<script src="js/data.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/main.js"></script>
+</form>
+
+<div class="footer-link">
+<a href="login.html">Déjà un compte ? Se connecter</a>
+</div>
+
+</div>
+
+<script>
+document.getElementById("registerForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    alert("Compte créé !");
+    window.location.href = "login.html";
+});
+</script>
+
 </body>
 </html>
