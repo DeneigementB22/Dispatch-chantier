@@ -3,211 +3,216 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard | B22</title>
+<title>B22 Dispatch Pro</title>
 
 <style>
 body{
-    margin:0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: linear-gradient(135deg,#0f172a,#1e293b);
-    color:white;
-    padding:20px;
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#0f172a,#1e293b);
+color:white;
+padding:20px;
 }
 
-.container{
-    max-width:900px;
-    margin:auto;
+h1{color:#22c55e;text-align:center;}
+
+.section{
+background:#111827;
+padding:20px;
+border-radius:10px;
+margin-bottom:20px;
 }
 
-.card{
-    background:#111827;
-    padding:20px;
-    border-radius:12px;
-    margin-bottom:25px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.4);
-}
-
-h1{
-    text-align:center;
-    color:#22c55e;
-}
-
-h2{
-    margin-top:0;
-    color:#22c55e;
-}
-
-input, select{
-    width:100%;
-    padding:10px;
-    margin:8px 0 12px 0;
-    border:none;
-    border-radius:6px;
-    background:#1f2937;
-    color:white;
+input,select{
+width:100%;
+padding:8px;
+margin-bottom:10px;
+border:none;
+border-radius:6px;
+background:#1f2937;
+color:white;
 }
 
 button{
-    padding:10px 15px;
-    background:#22c55e;
-    border:none;
-    border-radius:6px;
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
-    margin-bottom:10px;
+padding:8px 12px;
+background:#22c55e;
+border:none;
+border-radius:6px;
+color:white;
+font-weight:bold;
+cursor:pointer;
+margin-bottom:10px;
 }
 
-button.danger{
-    background:#dc2626;
-}
-
-ul{
-    list-style:none;
-    padding:0;
-}
-
-li{
-    padding:8px;
-    background:#1f2937;
-    margin-bottom:6px;
-    border-radius:6px;
+.card{
+background:#1f2937;
+padding:8px;
+border-radius:6px;
+margin-bottom:6px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<h1>B22 Dispatch Pro</h1>
 
-<h1>B22 Dashboard</h1>
-
-<!-- SECTION EMPLOYÉS -->
-<div class="card">
+<!-- EMPLOYÉS -->
+<div class="section">
 <h2>Employés</h2>
 
-<input type="text" id="employeeName" placeholder="Nom employé">
-<button onclick="addEmployee()">Ajouter employé</button>
+<input type="text" id="empName" placeholder="Nom">
+<select id="empRole">
+<option>Employé</option>
+<option>Admin</option>
+</select>
 
-<ul id="employeeList"></ul>
+<button onclick="addEmployee()">Ajouter</button>
+
+<div id="empList"></div>
 </div>
 
-<!-- SECTION GROUPES -->
-<div class="card">
-<h2>Groupes / Chantiers</h2>
+<!-- GROUPES -->
+<div class="section">
+<h2>Chantiers</h2>
 
-<input type="text" id="groupName" placeholder="Nom du groupe / chantier">
-<button onclick="addGroup()">Créer groupe</button>
+<input type="text" id="groupName" placeholder="Nom chantier">
+<input type="text" id="groupAddress" placeholder="Adresse">
 
-<ul id="groupList"></ul>
+<button onclick="addGroup()">Créer</button>
+
+<div id="groupList"></div>
 </div>
 
-<!-- SECTION DISPATCH -->
-<div class="card">
-<h2>Dispatch</h2>
-
-<select id="dispatchEmployee"></select>
-<select id="dispatchGroup"></select>
-
-<button onclick="dispatchEmployee()">Assigner</button>
-
-<ul id="dispatchList"></ul>
+<!-- MESSAGES -->
+<div class="section">
+<h2>Messages</h2>
+<select id="msgEmployee"></select>
+<div id="messagesBox"></div>
 </div>
 
-<button onclick="logout()">Déconnexion</button>
+<!-- CALENDRIER -->
+<div class="section">
+<h2>Absences</h2>
 
+<select id="absenceEmployee"></select>
+<input type="date" id="absenceDate">
+<button onclick="addAbsence()">Marquer absent</button>
+
+<div id="absenceList"></div>
 </div>
 
 <script>
-let employees = JSON.parse(localStorage.getItem("employees")) || [];
-let groups = JSON.parse(localStorage.getItem("groups")) || [];
-let dispatches = JSON.parse(localStorage.getItem("dispatches")) || [];
+let employees = JSON.parse(localStorage.getItem("employees"))||[];
+let groups = JSON.parse(localStorage.getItem("groups"))||[];
+let messages = JSON.parse(localStorage.getItem("messages"))||{};
+let absences = JSON.parse(localStorage.getItem("absences"))||[];
 
-function saveData(){
-    localStorage.setItem("employees", JSON.stringify(employees));
-    localStorage.setItem("groups", JSON.stringify(groups));
-    localStorage.setItem("dispatches", JSON.stringify(dispatches));
+function save(){
+localStorage.setItem("employees",JSON.stringify(employees));
+localStorage.setItem("groups",JSON.stringify(groups));
+localStorage.setItem("messages",JSON.stringify(messages));
+localStorage.setItem("absences",JSON.stringify(absences));
 }
 
 function render(){
-    // EMPLOYÉS
-    let empList = document.getElementById("employeeList");
-    empList.innerHTML = "";
-    employees.forEach((emp,index)=>{
-        empList.innerHTML += `<li>${emp} 
-        <button class="danger" onclick="removeEmployee(${index})">X</button>
-        </li>`;
-    });
+let empDiv=document.getElementById("empList");
+empDiv.innerHTML="";
+employees.forEach((e,i)=>{
+empDiv.innerHTML+=`<div class="card">${e.name} (${e.role})</div>`;
+});
 
-    // GROUPES
-    let grpList = document.getElementById("groupList");
-    grpList.innerHTML = "";
-    groups.forEach((grp,index)=>{
-        grpList.innerHTML += `<li>${grp}</li>`;
-    });
+let msgSelect=document.getElementById("msgEmployee");
+let absSelect=document.getElementById("absenceEmployee");
 
-    // SELECTS
-    let empSelect = document.getElementById("dispatchEmployee");
-    let grpSelect = document.getElementById("dispatchGroup");
+msgSelect.innerHTML="";
+absSelect.innerHTML="";
 
-    empSelect.innerHTML = "";
-    grpSelect.innerHTML = "";
+employees.forEach((e,i)=>{
+msgSelect.innerHTML+=`<option value="${i}">${e.name}</option>`;
+absSelect.innerHTML+=`<option value="${i}">${e.name}</option>`;
+});
 
-    employees.forEach(emp=>{
-        empSelect.innerHTML += `<option>${emp}</option>`;
-    });
-
-    groups.forEach(grp=>{
-        grpSelect.innerHTML += `<option>${grp}</option>`;
-    });
-
-    // DISPATCH LIST
-    let disList = document.getElementById("dispatchList");
-    disList.innerHTML = "";
-    dispatches.forEach(d=>{
-        disList.innerHTML += `<li>${d.employee} → ${d.group}</li>`;
-    });
+renderMessages();
+renderAbsences();
 }
 
 function addEmployee(){
-    let name = document.getElementById("employeeName").value;
-    if(name){
-        employees.push(name);
-        document.getElementById("employeeName").value="";
-        saveData();
-        render();
-    }
+let name=document.getElementById("empName").value;
+let role=document.getElementById("empRole").value;
+if(name){
+employees.push({name,role});
+messages[name]=[];
+save();
+render();
 }
-
-function removeEmployee(index){
-    employees.splice(index,1);
-    saveData();
-    render();
 }
 
 function addGroup(){
-    let name = document.getElementById("groupName").value;
-    if(name){
-        groups.push(name);
-        document.getElementById("groupName").value="";
-        saveData();
-        render();
-    }
+let name=document.getElementById("groupName").value;
+let address=document.getElementById("groupAddress").value;
+if(name && address){
+groups.push({name,address});
+save();
+render();
+}
 }
 
-function dispatchEmployee(){
-    let emp = document.getElementById("dispatchEmployee").value;
-    let grp = document.getElementById("dispatchGroup").value;
-
-    if(emp && grp){
-        dispatches.push({employee:emp, group:grp});
-        saveData();
-        render();
-    }
+function sendMessage(empName,text){
+if(!messages[empName])messages[empName]=[];
+messages[empName].push(text);
+save();
+renderMessages();
 }
 
-function logout(){
-    window.location.href="login.html";
+function renderMessages(){
+let empIndex=document.getElementById("msgEmployee").value;
+if(empIndex===null)return;
+let emp=employees[empIndex];
+let box=document.getElementById("messagesBox");
+box.innerHTML="";
+if(messages[emp.name]){
+messages[emp.name].forEach(m=>{
+box.innerHTML+=`<div class="card">${m}</div>`;
+});
+}
+}
+
+document.getElementById("msgEmployee").addEventListener("change",renderMessages);
+
+function addAbsence(){
+let empIndex=document.getElementById("absenceEmployee").value;
+let date=document.getElementById("absenceDate").value;
+
+let today=new Date();
+let selected=new Date(date);
+
+let diff=(selected-today)/(1000*60*60*24);
+
+if(diff<2){
+alert("Absence doit être déclarée 2 jours à l'avance.");
+return;
+}
+
+absences.push({emp:employees[empIndex].name,date});
+save();
+renderAbsences();
+}
+
+function renderAbsences(){
+let div=document.getElementById("absenceList");
+div.innerHTML="";
+absences.forEach(a=>{
+div.innerHTML+=`<div class="card">${a.emp} absent le ${a.date}</div>`;
+});
+}
+
+function openMaps(address){
+if(/iPhone|iPad|iPod/i.test(navigator.userAgent)){
+window.open("https://maps.apple.com/?q="+encodeURIComponent(address));
+}else{
+window.open("https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(address));
+}
 }
 
 render();
