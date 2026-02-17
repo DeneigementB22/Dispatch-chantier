@@ -10,91 +10,207 @@ body{
     margin:0;
     font-family: Arial, Helvetica, sans-serif;
     background: linear-gradient(135deg,#0f172a,#1e293b);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
+    color:white;
+    padding:20px;
 }
 
-.box{
+.container{
+    max-width:900px;
+    margin:auto;
+}
+
+.card{
     background:#111827;
-    padding:35px;
-    width:100%;
-    max-width:420px;
-    border-radius:14px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.5);
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:25px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.4);
 }
 
 h1{
     text-align:center;
     color:#22c55e;
-    margin-bottom:5px;
 }
 
 h2{
-    text-align:center;
-    color:#e5e7eb;
-    margin-bottom:25px;
-    font-weight:normal;
+    margin-top:0;
+    color:#22c55e;
+}
+
+input, select{
+    width:100%;
+    padding:10px;
+    margin:8px 0 12px 0;
+    border:none;
+    border-radius:6px;
+    background:#1f2937;
+    color:white;
 }
 
 button{
-    width:100%;
-    padding:14px;
-    margin-bottom:15px;
+    padding:10px 15px;
     background:#22c55e;
     border:none;
-    border-radius:8px;
+    border-radius:6px;
     color:white;
-    font-size:16px;
     font-weight:bold;
     cursor:pointer;
+    margin-bottom:10px;
 }
 
-button:hover{
-    background:#16a34a;
+button.danger{
+    background:#dc2626;
 }
 
-.secondary{
-    background:#374151;
+ul{
+    list-style:none;
+    padding:0;
 }
 
-.secondary:hover{
-    background:#4b5563;
+li{
+    padding:8px;
+    background:#1f2937;
+    margin-bottom:6px;
+    border-radius:6px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
+<div class="container">
 
-<h1>B22</h1>
-<h2>Dashboard</h2>
+<h1>B22 Dashboard</h1>
 
-<button onclick="ajouterEmploye()">Ajouter employé</button>
-<button onclick="supprimerEmploye()">Supprimer employé</button>
+<!-- SECTION EMPLOYÉS -->
+<div class="card">
+<h2>Employés</h2>
 
-<button class="secondary" onclick="window.location.href='login.html'">
-Déconnexion
-</button>
+<input type="text" id="employeeName" placeholder="Nom employé">
+<button onclick="addEmployee()">Ajouter employé</button>
+
+<ul id="employeeList"></ul>
+</div>
+
+<!-- SECTION GROUPES -->
+<div class="card">
+<h2>Groupes / Chantiers</h2>
+
+<input type="text" id="groupName" placeholder="Nom du groupe / chantier">
+<button onclick="addGroup()">Créer groupe</button>
+
+<ul id="groupList"></ul>
+</div>
+
+<!-- SECTION DISPATCH -->
+<div class="card">
+<h2>Dispatch</h2>
+
+<select id="dispatchEmployee"></select>
+<select id="dispatchGroup"></select>
+
+<button onclick="dispatchEmployee()">Assigner</button>
+
+<ul id="dispatchList"></ul>
+</div>
+
+<button onclick="logout()">Déconnexion</button>
 
 </div>
 
 <script>
-function ajouterEmploye(){
-    let nom = prompt("Nom de l'employé à ajouter :");
-    if(nom){
-        alert("Employé " + nom + " ajouté !");
+let employees = JSON.parse(localStorage.getItem("employees")) || [];
+let groups = JSON.parse(localStorage.getItem("groups")) || [];
+let dispatches = JSON.parse(localStorage.getItem("dispatches")) || [];
+
+function saveData(){
+    localStorage.setItem("employees", JSON.stringify(employees));
+    localStorage.setItem("groups", JSON.stringify(groups));
+    localStorage.setItem("dispatches", JSON.stringify(dispatches));
+}
+
+function render(){
+    // EMPLOYÉS
+    let empList = document.getElementById("employeeList");
+    empList.innerHTML = "";
+    employees.forEach((emp,index)=>{
+        empList.innerHTML += `<li>${emp} 
+        <button class="danger" onclick="removeEmployee(${index})">X</button>
+        </li>`;
+    });
+
+    // GROUPES
+    let grpList = document.getElementById("groupList");
+    grpList.innerHTML = "";
+    groups.forEach((grp,index)=>{
+        grpList.innerHTML += `<li>${grp}</li>`;
+    });
+
+    // SELECTS
+    let empSelect = document.getElementById("dispatchEmployee");
+    let grpSelect = document.getElementById("dispatchGroup");
+
+    empSelect.innerHTML = "";
+    grpSelect.innerHTML = "";
+
+    employees.forEach(emp=>{
+        empSelect.innerHTML += `<option>${emp}</option>`;
+    });
+
+    groups.forEach(grp=>{
+        grpSelect.innerHTML += `<option>${grp}</option>`;
+    });
+
+    // DISPATCH LIST
+    let disList = document.getElementById("dispatchList");
+    disList.innerHTML = "";
+    dispatches.forEach(d=>{
+        disList.innerHTML += `<li>${d.employee} → ${d.group}</li>`;
+    });
+}
+
+function addEmployee(){
+    let name = document.getElementById("employeeName").value;
+    if(name){
+        employees.push(name);
+        document.getElementById("employeeName").value="";
+        saveData();
+        render();
     }
 }
 
-function supprimerEmploye(){
-    let nom = prompt("Nom de l'employé à supprimer :");
-    if(nom){
-        alert("Employé " + nom + " supprimé !");
+function removeEmployee(index){
+    employees.splice(index,1);
+    saveData();
+    render();
+}
+
+function addGroup(){
+    let name = document.getElementById("groupName").value;
+    if(name){
+        groups.push(name);
+        document.getElementById("groupName").value="";
+        saveData();
+        render();
     }
 }
+
+function dispatchEmployee(){
+    let emp = document.getElementById("dispatchEmployee").value;
+    let grp = document.getElementById("dispatchGroup").value;
+
+    if(emp && grp){
+        dispatches.push({employee:emp, group:grp});
+        saveData();
+        render();
+    }
+}
+
+function logout(){
+    window.location.href="login.html";
+}
+
+render();
 </script>
 
 </body>
