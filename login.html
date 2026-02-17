@@ -3,112 +3,160 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Connexion | B22</title>
+<title>Dispatch Pro - Login</title>
 
 <style>
 body{
-    margin:0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: linear-gradient(135deg,#0f172a,#1e293b);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
+margin:0;
+font-family:Arial, sans-serif;
+background:linear-gradient(135deg,#0f172a,#1e293b);
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+color:white;
 }
 
-.box{
-    background:#111827;
-    padding:35px;
-    width:100%;
-    max-width:420px;
-    border-radius:14px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.5);
+.container{
+background:#111827;
+padding:30px;
+border-radius:12px;
+width:100%;
+max-width:350px;
+box-shadow:0 0 20px rgba(0,0,0,0.5);
 }
 
 h1{
-    text-align:center;
-    color:#22c55e;
-    margin-bottom:5px;
-}
-
-h2{
-    text-align:center;
-    color:#e5e7eb;
-    margin-bottom:25px;
-    font-weight:normal;
-}
-
-label{
-    color:#cbd5e1;
-    font-size:14px;
+text-align:center;
+color:#22c55e;
+margin-bottom:20px;
 }
 
 input{
-    width:100%;
-    padding:12px;
-    margin-top:6px;
-    margin-bottom:18px;
-    border:none;
-    border-radius:8px;
-    background:#1f2937;
-    color:white;
-    font-size:15px;
+width:100%;
+padding:10px;
+margin-bottom:12px;
+border:none;
+border-radius:6px;
+background:#1f2937;
+color:white;
 }
 
 button{
-    width:100%;
-    padding:14px;
-    background:#22c55e;
-    border:none;
-    border-radius:8px;
-    color:white;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
+width:100%;
+padding:10px;
+background:#22c55e;
+border:none;
+border-radius:6px;
+color:white;
+font-weight:bold;
+cursor:pointer;
+margin-bottom:10px;
 }
 
-.footer-link{
-    text-align:center;
-    margin-top:20px;
-}
-
-.footer-link a{
-    color:#22c55e;
-    text-decoration:none;
+button:hover{
+opacity:0.9;
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
+<div class="container">
+<h1>Dispatch Pro</h1>
 
-<h1>B22</h1>
-<h2>Connexion</h2>
+<input type="text" id="companyName" placeholder="Nom de l'entreprise (si nouveau)">
+<input type="email" id="email" placeholder="Email">
+<input type="password" id="password" placeholder="Mot de passe">
 
-<form id="loginForm">
+<button onclick="register()">Créer Compte + Entreprise</button>
+<button onclick="login()">Connexion</button>
 
-<label>Courriel</label>
-<input type="email" required>
-
-<label>Mot de passe</label>
-<input type="password" required>
-
-<button type="submit">Se connecter</button>
-
-</form>
-
-<div class="footer-link">
-<a href="index.html">Créer un compte</a>
+<p id="message"></p>
 </div>
 
-</div>
+<script type="module">
 
-<script>
-document.getElementById("loginForm").addEventListener("submit", function(e){
-    e.preventDefault();
-    window.location.href = "dashboard.html";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } 
+from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } 
+from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDLSod4MSUPrbjfSljBi0NE1CJQ6QgI7Z0",
+  authDomain: "dispatch-pro-4f596.firebaseapp.com",
+  projectId: "dispatch-pro-4f596",
+  storageBucket: "dispatch-pro-4f596.firebasestorage.app",
+  messagingSenderId: "1080596779642",
+  appId: "1:1080596779642:web:aa61ac6fe010ea0ea3a1c3"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+window.register = async function(){
+
+const companyName = document.getElementById("companyName").value;
+const email = document.getElementById("email").value;
+const password = document.getElementById("password").value;
+
+if(!companyName){
+document.getElementById("message").innerText="Nom entreprise requis.";
+return;
+}
+
+try{
+
+const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+const user = userCredential.user;
+
+const companyId = user.uid;
+
+await setDoc(doc(db,"companies",companyId),{
+name: companyName,
+ownerId: user.uid,
+createdAt: new Date()
 });
+
+await setDoc(doc(db,"companies",companyId,"users",user.uid),{
+email: email,
+role: "Owner"
+});
+
+window.location.href="dashboard.html";
+
+}catch(error){
+document.getElementById("message").innerText=error.message;
+}
+
+}
+
+window.login = async function(){
+
+const email = document.getElementById("email").value;
+const password = document.getElementById("password").value;
+
+try{
+
+const userCredential = await signInWithEmailAndPassword(auth,email,password);
+const user = userCredential.user;
+
+const companyDoc = await getDoc(doc(db,"companies",user.uid));
+
+if(companyDoc.exists()){
+window.location.href="dashboard.html";
+}else{
+document.getElementById("message").innerText="Entreprise introuvable.";
+}
+
+}catch(error){
+document.getElementById("message").innerText=error.message;
+}
+
+}
+
 </script>
 
 </body>
