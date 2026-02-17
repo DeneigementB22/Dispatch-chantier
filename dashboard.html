@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>B22 Dispatch Pro</title>
+<title>Dispatch Pro Dashboard</title>
 
 <style>
 body{
@@ -11,212 +11,21 @@ margin:0;
 font-family:Arial;
 background:linear-gradient(135deg,#0f172a,#1e293b);
 color:white;
-padding:20px;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
 }
 
-h1{color:#22c55e;text-align:center;}
-
-.section{
-background:#111827;
-padding:20px;
-border-radius:10px;
-margin-bottom:20px;
-}
-
-input,select{
-width:100%;
-padding:8px;
-margin-bottom:10px;
-border:none;
-border-radius:6px;
-background:#1f2937;
-color:white;
-}
-
-button{
-padding:8px 12px;
-background:#22c55e;
-border:none;
-border-radius:6px;
-color:white;
-font-weight:bold;
-cursor:pointer;
-margin-bottom:10px;
-}
-
-.card{
-background:#1f2937;
-padding:8px;
-border-radius:6px;
-margin-bottom:6px;
+h1{
+color:#22c55e;
 }
 </style>
 </head>
 
 <body>
 
-<h1>B22 Dispatch Pro</h1>
-
-<!-- EMPLOYÉS -->
-<div class="section">
-<h2>Employés</h2>
-
-<input type="text" id="empName" placeholder="Nom">
-<select id="empRole">
-<option>Employé</option>
-<option>Admin</option>
-</select>
-
-<button onclick="addEmployee()">Ajouter</button>
-
-<div id="empList"></div>
-</div>
-
-<!-- GROUPES -->
-<div class="section">
-<h2>Chantiers</h2>
-
-<input type="text" id="groupName" placeholder="Nom chantier">
-<input type="text" id="groupAddress" placeholder="Adresse">
-
-<button onclick="addGroup()">Créer</button>
-
-<div id="groupList"></div>
-</div>
-
-<!-- MESSAGES -->
-<div class="section">
-<h2>Messages</h2>
-<select id="msgEmployee"></select>
-<div id="messagesBox"></div>
-</div>
-
-<!-- CALENDRIER -->
-<div class="section">
-<h2>Absences</h2>
-
-<select id="absenceEmployee"></select>
-<input type="date" id="absenceDate">
-<button onclick="addAbsence()">Marquer absent</button>
-
-<div id="absenceList"></div>
-</div>
-
-<script>
-let employees = JSON.parse(localStorage.getItem("employees"))||[];
-let groups = JSON.parse(localStorage.getItem("groups"))||[];
-let messages = JSON.parse(localStorage.getItem("messages"))||{};
-let absences = JSON.parse(localStorage.getItem("absences"))||[];
-
-function save(){
-localStorage.setItem("employees",JSON.stringify(employees));
-localStorage.setItem("groups",JSON.stringify(groups));
-localStorage.setItem("messages",JSON.stringify(messages));
-localStorage.setItem("absences",JSON.stringify(absences));
-}
-
-function render(){
-let empDiv=document.getElementById("empList");
-empDiv.innerHTML="";
-employees.forEach((e,i)=>{
-empDiv.innerHTML+=`<div class="card">${e.name} (${e.role})</div>`;
-});
-
-let msgSelect=document.getElementById("msgEmployee");
-let absSelect=document.getElementById("absenceEmployee");
-
-msgSelect.innerHTML="";
-absSelect.innerHTML="";
-
-employees.forEach((e,i)=>{
-msgSelect.innerHTML+=`<option value="${i}">${e.name}</option>`;
-absSelect.innerHTML+=`<option value="${i}">${e.name}</option>`;
-});
-
-renderMessages();
-renderAbsences();
-}
-
-function addEmployee(){
-let name=document.getElementById("empName").value;
-let role=document.getElementById("empRole").value;
-if(name){
-employees.push({name,role});
-messages[name]=[];
-save();
-render();
-}
-}
-
-function addGroup(){
-let name=document.getElementById("groupName").value;
-let address=document.getElementById("groupAddress").value;
-if(name && address){
-groups.push({name,address});
-save();
-render();
-}
-}
-
-function sendMessage(empName,text){
-if(!messages[empName])messages[empName]=[];
-messages[empName].push(text);
-save();
-renderMessages();
-}
-
-function renderMessages(){
-let empIndex=document.getElementById("msgEmployee").value;
-if(empIndex===null)return;
-let emp=employees[empIndex];
-let box=document.getElementById("messagesBox");
-box.innerHTML="";
-if(messages[emp.name]){
-messages[emp.name].forEach(m=>{
-box.innerHTML+=`<div class="card">${m}</div>`;
-});
-}
-}
-
-document.getElementById("msgEmployee").addEventListener("change",renderMessages);
-
-function addAbsence(){
-let empIndex=document.getElementById("absenceEmployee").value;
-let date=document.getElementById("absenceDate").value;
-
-let today=new Date();
-let selected=new Date(date);
-
-let diff=(selected-today)/(1000*60*60*24);
-
-if(diff<2){
-alert("Absence doit être déclarée 2 jours à l'avance.");
-return;
-}
-
-absences.push({emp:employees[empIndex].name,date});
-save();
-renderAbsences();
-}
-
-function renderAbsences(){
-let div=document.getElementById("absenceList");
-div.innerHTML="";
-absences.forEach(a=>{
-div.innerHTML+=`<div class="card">${a.emp} absent le ${a.date}</div>`;
-});
-}
-
-function openMaps(address){
-if(/iPhone|iPad|iPod/i.test(navigator.userAgent)){
-window.open("https://maps.apple.com/?q="+encodeURIComponent(address));
-}else{
-window.open("https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(address));
-}
-}
-
-render();
-</script>
+<h1>Bienvenue sur Dispatch Pro 🚀</h1>
 
 </body>
 </html>
